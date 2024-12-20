@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "next": "^13.1.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "name": "douglas-tabnews",
+  "description": "Implementação do projeto tabnews para o curso.dev",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Douglascrc/douglas-tabnews.git"
+  },
+  "author": "Douglas Campos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Douglascrc/douglas-tabnews/issues"
+  },
+  "homepage": "https://github.com/Douglascrc/douglas-tabnews#readme"
+}
