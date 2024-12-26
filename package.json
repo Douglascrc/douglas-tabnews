@@ -1,16 +1,13 @@
 {
-  "dependencies": {
-    "next": "^13.1.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
   "name": "douglas-tabnews",
   "description": "Implementação do projeto tabnews para o curso.dev",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "next dev"
+    "dev": "next dev",
+    "lint:check": "prettier --check .",
+    "lint:fix": "prettier --write ."
   },
   "repository": {
     "type": "git",
@@ -21,5 +18,13 @@
   "bugs": {
     "url": "https://github.com/Douglascrc/douglas-tabnews/issues"
   },
-  "homepage": "https://github.com/Douglascrc/douglas-tabnews#readme"
+  "homepage": "https://github.com/Douglascrc/douglas-tabnews#readme",
+  "dependencies": {
+    "next": "^13.1.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.4.2"
+  }
 }
