@@ -4,12 +4,12 @@ async function status(request, response) {
   let updatedAt = new Date().toISOString();
   let databaseSettings = {};
   const databaseName = process.env.POSTGRES_DB;
-
+  console.log("NODE_ENV:", process.env.NODE_ENV || "undefined");
   try {
     let databaseResult = await database.query({
       text: `SELECT current_setting('server_version')::FLOAT AS version, 
       current_setting('max_connections')::INT AS max_connections,
-      COUNT(*)::INT AS used_connections
+      COUNT(*)::INT AS opened_connections
       FROM pg_stat_activity WHERE datname = $1;`,
       values: [databaseName],
     });
@@ -23,7 +23,6 @@ async function status(request, response) {
       database_status: "unhealthy",
     };
   }
-
   response.status(200).json({
     updated_at: updatedAt,
     dependencies: {
