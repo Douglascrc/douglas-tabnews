@@ -7,7 +7,7 @@ async function query(text, params) {
     user: process.env.POSTGRES_USER,
     database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
-    ssl: process.env.NODE_ENV === "production" ? true : false,
+    ssl: getSSLValues(),
   });
 
   try {
@@ -20,6 +20,15 @@ async function query(text, params) {
   } finally {
     await client.end();
   }
+}
+
+function getSSLValues() {
+  if (process.env.POSTGRES_CA) {
+    return {
+      ca: process.env.POSTGRES_CA,
+    };
+  }
+  return process.env.NODE_ENV === "preview" ? true : false;
 }
 
 export default {

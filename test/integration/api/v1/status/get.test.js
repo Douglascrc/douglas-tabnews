@@ -19,11 +19,11 @@ test("GET localhost:3000/api/v1/status should return 200", async () => {
   );
 
   expect(
-    responseBody.dependencies.database_info.used_connections,
+    responseBody.dependencies.database_info.opened_connections,
   ).toBeDefined();
-  expect(typeof responseBody.dependencies.database_info.used_connections).toBe(
-    "number",
-  );
+  expect(
+    typeof responseBody.dependencies.database_info.opened_connections,
+  ).toBe("number");
 
   expect(responseBody.dependencies.database_info.version).toBeDefined();
   expect(typeof responseBody.dependencies.database_info.version).toBe("number");
