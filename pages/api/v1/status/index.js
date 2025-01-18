@@ -4,7 +4,7 @@ async function status(request, response) {
   let updatedAt = new Date().toISOString();
   let databaseSettings = {};
   const databaseName = process.env.POSTGRES_DB;
-  console.log("NODE_ENV:", process.env.NODE_ENV || "undefined");
+
   try {
     let databaseResult = await database.query({
       text: `SELECT current_setting('server_version')::FLOAT AS version, 
