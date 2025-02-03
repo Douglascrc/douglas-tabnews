@@ -4,12 +4,24 @@ async function waitAllServices() {
   await waitWebServer();
 
   async function waitWebServer() {
-    retry(fetchStatusPage);
+    retry(fetchStatusPage),
+      {
+        retries: 100,
+        maxTimeout: 1000,
+        onRetry: (error, attempt) => {
+          console.log(
+            `Attempt${attempt} - Failed to fetch status page: ${error.message}`,
+          );
+        },
+      };
   }
 
   async function fetchStatusPage() {
     const response = await fetch(`${process.env.WEB_SERVER}/api/v1/status`);
-    await response.json();
+
+    if (response.status != 200) {
+      throw new Error();
+    }
   }
 }
 
