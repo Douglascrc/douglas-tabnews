@@ -1,5 +1,6 @@
 /node_modules
 /.next
+.cache_ggshield
 
 # ignore env file
 .env
