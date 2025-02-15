@@ -19,6 +19,7 @@ async function status(request, response) {
       ...databaseResult.rows[0],
     };
   } catch (error) {
+    console.error("Erro ao consultar o banco de dados:", error);
     databaseSettings = {
       database_status: "unhealthy",
     };

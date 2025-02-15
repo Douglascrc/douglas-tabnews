@@ -9,7 +9,7 @@ export default async function migrations(request, response) {
 
     const defaultMigrationsRunner = {
       dbClient: dbClient,
-      dir: join("infra", "migrations"),
+      dir: join(process.cwd(), "infra", "migrations"),
       dryRun: true,
       direction: "up",
       verbose: true,
