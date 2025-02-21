@@ -30,8 +30,8 @@ export default async function migrations(request, response) {
       if (migratedMigrations.length > 0) {
         return response.status(201).json(migratedMigrations);
       }
+      return response.status(200).json(migratedMigrations);
     }
-    return response.status(405).end();
   } catch (error) {
     console.log(error);
     return response.status(500).json({ error: error.message });

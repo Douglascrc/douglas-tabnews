@@ -1,22 +1,19 @@
-import database from "infra/database";
 import orchestrator from "tests/orchestrator.js";
 
 beforeAll(async () => {
-  await cleanDatabase();
   await orchestrator.waitAllServices();
+  await orchestrator.clearDatabase();
 });
 
-async function cleanDatabase() {
-  await database.query("drop schema public cascade; create schema public;");
-}
+describe("GET /api/v1/migrations ", () => {
+  test("Retrieving migrations", async () => {
+    const response = await fetch(`${process.env.WEB_SERVER}/api/v1/migrations`);
+    expect(response.status).toBe(200);
 
-test("GET localhost:3000/api/v1/migrations return 200", async () => {
-  const response = await fetch("http://localhost:3000/api/v1/migrations");
-  expect(response.status).toBe(200);
+    const responseBody = await response.json();
+    console.log(responseBody);
 
-  const responseBody = await response.json();
-  console.log(responseBody);
-
-  expect(Array.isArray(responseBody)).toBe(true);
-  expect(responseBody.length).toBeGreaterThan(0);
+    expect(Array.isArray(responseBody)).toBe(true);
+    expect(responseBody.length).toBeGreaterThan(0);
+  });
 });
