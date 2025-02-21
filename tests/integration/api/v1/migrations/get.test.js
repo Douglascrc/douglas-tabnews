@@ -5,7 +5,7 @@ beforeAll(async () => {
   await orchestrator.clearDatabase();
 });
 
-describe("GET /api/v1/migrations ", () => {
+describe("GET /api/v1/migrations", () => {
   test("Retrieving migrations", async () => {
     const response = await fetch(`${process.env.WEB_SERVER}/api/v1/migrations`);
     expect(response.status).toBe(200);

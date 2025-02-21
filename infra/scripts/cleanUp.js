@@ -6,7 +6,6 @@ function runDev() {
     shell: true,
   });
 
-  // Caso o processo de dev seja encerrado, executa o cleanup
   dev.on("exit", (code, signal) => {
     console.log(
       `Processo dev finalizado (código: ${code}, sinal: ${signal}). Iniciando cleanup...`,
@@ -14,7 +13,6 @@ function runDev() {
     runCleanup();
   });
 
-  // Captura Ctrl+C e envia sinal para o processo filho
   process.on("SIGINT", () => {
     console.log("Recebeu SIGINT. Encerrando processo dev...");
     dev.kill("SIGINT");
@@ -27,7 +25,7 @@ function runCleanup() {
     shell: true,
   });
   stop.on("exit", (code, signal) => {
-    console.log(`Cleanup finalizado (código: ${code}).`);
+    console.log(`Cleanup finalizado código: ${code} e sinal: ${signal}.`);
     process.exit(code);
   });
 }
