@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import styles from "./status.module.css";
 
 async function fetchAPI(key) {
   const response = await fetch(key);
@@ -12,14 +13,14 @@ export default function StatusPage() {
   });
 
   return (
-    <div className="status">
+    <div className={styles.status}>
       <h1>Status</h1>
       {!isLoading ? (
         <>
           <span>
             {data &&
             data.dependencies.database_info.database_status === "healthy" ? (
-              <div className="icons">
+              <div className={styles.icons}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -67,14 +68,14 @@ export default function StatusPage() {
             )}
           </span>
 
-          <div className="updated">
+          <div className={styles.updated}>
             <h2>
               Última atualização:
               {new Date(data.updated_at).toLocaleString("pt-BR")}
             </h2>
           </div>
 
-          <section className="database-info">
+          <section className={styles.databaseInfo}>
             <div>
               <h3>Database Version</h3>
               <h3>{data.dependencies.database_info.version}</h3>
