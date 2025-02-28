@@ -41,7 +41,8 @@
     "node-pg-migrate": "7.9.1",
     "pg": "8.13.3",
     "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "react-dom": "19.0.0",
+    "swr": "2.3.2"
   },
   "devDependencies": {
     "@commitlint/cli": "19.7.1",
