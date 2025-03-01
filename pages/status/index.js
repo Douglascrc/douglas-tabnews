@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import styles from "./status.module.css";
+import "app/global.css";
 
 async function fetchAPI(key) {
   const response = await fetch(key);
@@ -77,19 +78,77 @@ export default function StatusPage() {
 
           <section className={styles.databaseInfo}>
             <div>
-              <h3>Database Version</h3>
+              <h2>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-database"
+                >
+                  <ellipse cx="12" cy="5" rx="9" ry="3" />
+                  <path d="M3 5V19A9 3 0 0 0 21 19V5" />
+                  <path d="M3 12A9 3 0 0 0 21 12" />
+                </svg>
+                Database Version
+              </h2>
+
               <h3>{data.dependencies.database_info.version}</h3>
               <h4>PostgreSQL</h4>
             </div>
 
             <div>
-              <h3>Max Connections</h3>
+              <h2>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-network"
+                >
+                  <rect x="16" y="16" width="6" height="6" rx="1" />
+                  <rect x="2" y="16" width="6" height="6" rx="1" />
+                  <rect x="9" y="2" width="6" height="6" rx="1" />
+                  <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
+                  <path d="M12 12V8" />
+                </svg>
+                Max Connections
+              </h2>
               <h3>{data.dependencies.database_info.max_connections}</h3>
               <h4>Maximum allowed</h4>
             </div>
 
             <div>
-              <h3>Open Connections</h3>
+              <h2>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-users"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                Open Connections
+              </h2>
               <h3>{data.dependencies.database_info.opened_connections}</h3>
               <h4>Connection</h4>
             </div>

@@ -1,9 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
-
 .status {
   font-size: 1rem;
-  font-family: Roboto, sans-serif;
-  text-align: center;
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -14,28 +10,49 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  text-align: center;
   font-weight: 600;
   gap: 8px;
-  width: 100%;
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 .updated {
-  font-size: x-small;
-  color: #3f3f3f;
+  font-size: 0.75rem;
 }
 
 .databaseInfo {
   display: flex;
   flex-direction: row;
-  gap: 100px;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 4px;
+  padding: 1.5rem;
 }
 
 .databaseInfo > div {
-  padding: 16px;
-  background-color: #161616;
+  padding: 1rem;
+  background-color: var(--bg-card);
   border-radius: 8px;
   color: #e0e0e0;
+  min-width: 300px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.databaseInfo > div > h2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .databaseInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
 }
