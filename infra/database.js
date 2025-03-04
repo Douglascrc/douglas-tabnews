@@ -8,10 +8,10 @@ async function query(text, params) {
     const result = await client.query(text, params);
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   } finally {
-    await client.end();
+    await client?.end();
   }
 }
 

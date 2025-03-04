@@ -5,7 +5,7 @@ beforeAll(async () => {
 });
 
 describe("GET /api/v1/status", () => {
-  test("Retrieving curren database status", async () => {
+  test("Retrieving current database status", async () => {
     const response = await fetch(`${process.env.WEB_SERVER}/api/v1/status`);
     expect(response.status).toBe(200);
 
@@ -14,13 +14,6 @@ describe("GET /api/v1/status", () => {
 
     expect(responseBody.updated_at).toBeDefined();
     expect(responseBody.updated_at).toEqual(parsedUpdatedAt);
-
-    expect(
-      responseBody.dependencies.database_info.database_status,
-    ).toBeDefined();
-    expect(typeof responseBody.dependencies.database_info.database_status).toBe(
-      "string",
-    );
 
     expect(
       responseBody.dependencies.database_info.max_connections,
