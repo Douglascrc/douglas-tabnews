@@ -1,4 +1,5 @@
 import database from "infra/database";
+import { InternalServerError } from "infra/errors";
 
 async function status(request, response) {
   let updatedAt = new Date().toISOString();
@@ -15,21 +16,22 @@ async function status(request, response) {
     });
 
     databaseSettings = {
-      database_status: "healthy",
       ...databaseResult.rows[0],
     };
+
+    response.status(200).json({
+      updated_at: updatedAt,
+      dependencies: {
+        database_info: databaseSettings,
+      },
+    });
   } catch (error) {
-    console.error("Erro ao consultar o banco de dados:", error);
-    databaseSettings = {
-      database_status: "unhealthy",
-    };
+    const publicErrorObject = new InternalServerError({
+      cause: error,
+    });
+    console.error(publicErrorObject);
+    response.status(500).json(publicErrorObject);
   }
-  response.status(200).json({
-    updated_at: updatedAt,
-    dependencies: {
-      database_info: databaseSettings,
-    },
-  });
 }
 
 export default status;
