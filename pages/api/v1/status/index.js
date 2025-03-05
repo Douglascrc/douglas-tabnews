@@ -6,6 +6,10 @@ async function status(request, response) {
   let databaseSettings = {};
   const databaseName = process.env.POSTGRES_DB;
 
+  if (request.method != "GET") {
+    return response.status(405).json({ message: "METHOD NOT ALLOWED" });
+  }
+
   try {
     let databaseResult = await database.query({
       text: `SELECT current_setting('server_version')::FLOAT AS version, 
