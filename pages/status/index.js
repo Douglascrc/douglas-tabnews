@@ -9,18 +9,17 @@ async function fetchAPI(key) {
 }
 
 export default function StatusPage() {
-  const { data, error, isLoading } = useSWR("/api/v1/status", fetchAPI, {
+  const { data, isLoading } = useSWR("/api/v1/status", fetchAPI, {
     refreshInterval: 10000,
   });
 
   return (
     <div className={styles.status}>
       <h1>Status</h1>
-      {!isLoading ? (
+      {!isLoading && data ? (
         <>
           <span>
-            {data &&
-            data.dependencies.database_info.database_status === "healthy" ? (
+            {data.dependencies?.database_info ? (
               <div className={styles.icons}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -39,10 +38,8 @@ export default function StatusPage() {
                 </svg>
                 <p>Healthy</p>
               </div>
-            ) : data &&
-              data.dependencies.database_info.database_status ===
-                "unhealthy" ? (
-              <>
+            ) : (
+              <div className={styles.icons}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -63,15 +60,13 @@ export default function StatusPage() {
                   <path d="m12 6 6 6 2.3-2.3a2.4 2.4 0 0 0 0-3.4l-2.6-2.6a2.4 2.4 0 0 0-3.4 0Z" />
                 </svg>
                 <p>Degraded</p>
-              </>
-            ) : (
-              <span>Error: {error.message}</span>
+              </div>
             )}
           </span>
 
           <div className={styles.updated}>
             <h2>
-              Última atualização:
+              Última atualização:{" "}
               {new Date(data.updated_at).toLocaleString("pt-BR")}
             </h2>
           </div>
@@ -98,7 +93,10 @@ export default function StatusPage() {
                 Database Version
               </h2>
 
-              <h3>{data.dependencies.database_info.version}</h3>
+              <h3>
+                {data.dependencies?.database_info.version ||
+                  "Serviço indisponível"}
+              </h3>
               <h4>PostgreSQL</h4>
             </div>
 
@@ -124,7 +122,10 @@ export default function StatusPage() {
                 </svg>
                 Max Connections
               </h2>
-              <h3>{data.dependencies.database_info.max_connections}</h3>
+              <h3>
+                {data.dependencies?.database_info.max_connections ||
+                  "Serviço indisponível"}
+              </h3>
               <h4>Maximum allowed</h4>
             </div>
 
@@ -149,7 +150,10 @@ export default function StatusPage() {
                 </svg>
                 Open Connections
               </h2>
-              <h3>{data.dependencies.database_info.opened_connections}</h3>
+              <h3>
+                {data.dependencies?.database_info.opened_connections ||
+                  "Serviço indisponível"}
+              </h3>
               <h4>Connection</h4>
             </div>
           </section>
