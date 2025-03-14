@@ -1,5 +1,18 @@
+import BuildAnimation from "./interface/components/buildAnimation.js";
+
 function Home() {
-  return <h1>Olá, Eu sou o Douglas</h1>;
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <BuildAnimation />
+    </div>
+  );
 }
 
 export default Home;
