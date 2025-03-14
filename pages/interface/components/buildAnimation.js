@@ -3,6 +3,12 @@ import styles from "../styles/buildAnimation.module.css";
 function BuildAnimation() {
   return (
     <div className={styles.crane}>
+      <div className={styles.construction_plaque}>
+        <p>
+          PÁGINA EM <br />
+          CONSTRUÇÃO
+        </p>
+      </div>
       <div className={styles.crane_jib}>
         <span></span>
         <span></span>

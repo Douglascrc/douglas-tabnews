@@ -178,7 +178,7 @@
   top: 10px;
   background-color: #1a1a1a;
   border-radius: 2px;
-  animation: smoke 1s linear infinite;
+  animation: smoke 1s ease-in-out infinite;
 }
 .crane_body_engine div span::after {
   content: "";
@@ -189,7 +189,7 @@
   top: 10px;
   background-color: #000;
   border-radius: 2px;
-  animation: smoke 2s linear infinite;
+  animation: smoke 2s ease-in-out infinite;
 }
 .crane_jib {
   position: relative;
@@ -279,7 +279,7 @@
   width: 2px;
   height: 200px;
   background-color: #323232;
-  animation: jib-move 10s linear infinite;
+  animation: jib-move 10s ease-in-out infinite;
 }
 .crane_jib_head_rope div:last-child {
   position: absolute;
@@ -288,7 +288,7 @@
   width: 2px;
   height: 200px;
   background-color: #323232;
-  animation: jib-move 10s linear infinite;
+  animation: jib-move 10s ease-in-out infinite;
 }
 .crane_jib_head_hook {
   position: absolute;
@@ -299,6 +299,7 @@
   background-color: #ffc800;
   border: 1px solid #000;
   border-radius: 5px 5px 15px 15px;
+  transform-origin: bottom center;
 }
 .crane_jib_head_hook::before {
   content: "";
@@ -321,15 +322,69 @@
   border-radius: 30px 20px 20px 20px;
   transform: rotate(-57deg);
 }
-@keyframes jib-move {
-  0% {
-    height: 200px;
+.construction_plaque {
+  display: flex;
+  align-items: center;
+  position: relative;
+  left: 370px;
+  top: 500px;
+  width: auto;
+  height: 140px;
+  background: #8b5a2b;
+  border: 8px solid #5a3a1f;
+  border-radius: 10px;
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.3),
+    inset 0 0 20px rgba(0, 0, 0, 0.2);
+  animation: plaque-move 10s ease-in-out infinite;
+  transform-origin: top center;
+  z-index: 2;
+}
+
+.construction_plaque p {
+  position: relative;
+  padding: 0.5rem;
+  color: #fff;
+  width: 100%;
+  font-family: "Arial Black", sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  text-shadow:
+    2px 2px 0 #000,
+    -1px -1px 0 #000;
+  line-height: 1.2;
+}
+
+.construction_plaque::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 30px;
+  background: #4a4a4a;
+  box-shadow:
+    0 0 0 4px #2a2a2a,
+    0 30px 0 4px #4a4a4a,
+    0 30px 0 8px #2a2a2a;
+}
+@keyframes plaque-move {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg); /* Sincroniza com altura 200px */
   }
   50% {
-    height: 400px;
+    transform: translateY(200px) rotate(3deg); /* Sincroniza com altura 400px */
   }
+}
+@keyframes jib-move {
+  0%,
   100% {
-    height: 200px;
+    height: 200px; /* Posição mais alta */
+  }
+  50% {
+    height: 400px; /* Posição mais baixa */
   }
 }
 @keyframes smoke {
@@ -363,5 +418,55 @@
   100% {
     border-radius: 50%;
     opacity: 0;
+  }
+}
+
+@keyframes plaque-swing {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .crane_jib {
+    transform: translate(145px, 205px) rotate(-35deg);
+  }
+
+  .crane_jib_head {
+    transform: translate(342px, 10px) rotate(-35deg);
+  }
+
+  .construction_plaque {
+    left: 370px;
+    top: 500px;
+  }
+}
+@media (min-width: 480px) {
+  .crane {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .crane_caterpillar {
+    padding: 15px 10px;
+    gap: 10px;
+    border-radius: 50px;
+  }
+
+  .crane_caterpillar span {
+    width: 12vw;
+    height: 12vw;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .crane_body_cabin {
+    height: 50vw;
+    max-height: 250px;
   }
 }
