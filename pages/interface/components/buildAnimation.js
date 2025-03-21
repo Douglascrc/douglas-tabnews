@@ -1,4 +1,4 @@
-import styles from "../styles/buildAnimation.module.css";
+import styles from "pages/interface/styles/buildAnimation.module.css";
 
 function BuildAnimation() {
   return (
