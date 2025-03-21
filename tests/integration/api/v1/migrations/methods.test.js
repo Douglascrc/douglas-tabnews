@@ -10,7 +10,7 @@ describe("Forbbiden methods /api/v1/migrations", () => {
 
   test.each(blockedMethods)("Methods should be blocked", async (method) => {
     const response = await fetch(
-      `${process.env.WEB_SERVER}/api//v1/migrations`,
+      `${process.env.WEB_SERVER}/api/v1/migrations`,
       {
         method,
       },
