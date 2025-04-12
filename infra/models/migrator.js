@@ -49,7 +49,7 @@ async function listPendingMigrations() {
     });
     throw publicErrorObject;
   } finally {
-    dbClient?.end();
+    await dbClient?.end();
   }
 }
 
