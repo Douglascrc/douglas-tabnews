@@ -12,6 +12,7 @@ Implementação do projeto tabnews para o curso.dev
   - [Migrações](#migrações)
 - [Infraestrutura](#infraestrutura)
 - [Testes](#testes)
+- [CI/CD](#cicd)
 - [Futuras Melhorias](#futuras-melhorias)
 - [Documentação Técnica](#documentação-técnica)
 
@@ -70,6 +71,18 @@ Veja o [package.json](package.json) para mais detalhes.
 ## Testes
 
 A suíte de testes utiliza Jest e testes integrados para verificar os endpoints e a integridade do sistema.
+
+## CI/CD
+
+Este projeto utiliza o GitHub Actions para implementar práticas de Continuous Integration e Continuous Deployment, garantindo a qualidade e a consistência do código. As principais tarefas automatizadas são:
+
+- **Testes Automatizados:**  
+  O fluxo de trabalho em [`.github/workflows/tests.yaml`](.github/workflows/tests.yaml) executa a suíte de testes (Jest) sempre que há um pull request, garantindo que todas as funcionalidades funcionem conforme o esperado.
+
+- **Análise de Código:**  
+  Os workflows em [`.github/workflows/linting.yaml`](.github/workflows/linting.yaml) realizam verificações de formatação com Prettier, linting com ESLint e validação de commits usando Commitlint. Essas verificações auxiliam na manutenção de um padrão consistente de código.
+
+Essas integrações ajudam a detectar automaticamente erros e problemas de formatação antes da integração de novas alterações na base de código. Assim, a equipe ganha agilidade e segurança durante o desenvolvimento.
 
 ## Futuras Melhorias
 
