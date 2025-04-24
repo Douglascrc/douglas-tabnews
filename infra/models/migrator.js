@@ -7,7 +7,7 @@ import { ServiceError } from "infra/errors.js";
 const defaultMigrationsRunner = {
   dir: join(process.cwd(), "infra", "migrations"),
   direction: "up",
-  verbose: true,
+  log: () => {},
   migrationsTable: "pgmigrations",
 };
 
