@@ -1,6 +1,15 @@
-import { InternalServerError, MethodNotAllowedError } from "infra/errors.js";
+import {
+  InternalServerError,
+  MethodNotAllowedError,
+  ValidationError,
+} from "infra/errors.js";
 
 function onErrorHandler(error, request, response) {
+  if (error instanceof ValidationError) {
+    console.log(error);
+    return response.status(error.statusCode).json(error);
+  }
+
   if (error.name === "ServiceError") {
     return response.status(error.statusCode).json(error);
   }
