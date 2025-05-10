@@ -1,11 +1,10 @@
 import { version as uuidVersion } from "uuid";
-import database from "infra/database";
 import orchestrator from "tests/orchestrator.js";
 
 beforeAll(async () => {
   await orchestrator.waitAllServices();
+  await orchestrator.clearDatabase();
   await orchestrator.runPendingMigrations();
-  await database.query("DELETE FROM users");
 });
 
 describe("POST /api/v1/users", () => {
