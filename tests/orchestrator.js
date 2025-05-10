@@ -1,6 +1,6 @@
 import retry from "async-retry";
 import database from "infra/database";
-import migrator from "infra/models/migrator.js";
+import migrator from "models/migrator.js";
 
 async function waitAllServices() {
   await waitWebServer();
@@ -31,7 +31,7 @@ async function clearDatabase() {
   await database.query("drop schema public cascade; create schema public;");
 }
 
-async function runPendingMigrations(params) {
+async function runPendingMigrations() {
   await migrator.runPendingMigrations();
 }
 
