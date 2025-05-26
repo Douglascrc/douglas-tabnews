@@ -11,5 +11,6 @@ export default router.handler(controller.errorHandlers);
 async function getHandler(request, response) {
   const username = request.query.username;
   const userData = await user.findOneByUsername(username);
-  return response.status(200).json(userData);
+  const { password, ...safeUserData } = userData; // Exclude the password field
+  return response.status(200).json(safeUserData);
 }
