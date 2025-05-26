@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node infra/scripts/cleanUp.js",
     "dev-core": "npm run prepar-env && next dev",
-    "test": "npm run services:up && npm run start:dev-test",
+    "test": "npm run services:up && npm run services:wait:database && npm run start:dev-test",
     "posttest": "npm run services:stop",
     "test:watch": "jest --watchAll --runInBand --verbose",
     "start:dev-test": "concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"",
