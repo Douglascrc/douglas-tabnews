@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node infra/scripts/cleanUp.js",
     "dev-core": "npm run prepar-env && next dev",
-    "test": "npm run services:up && npm run start:dev-test",
+    "test": "npm run services:up && npm run services:wait:database && npm run start:dev-test",
     "posttest": "npm run services:stop",
     "test:watch": "jest --watchAll --runInBand --verbose",
     "start:dev-test": "concurrently -n next,jest --hide next -k -s command-jest \"next dev\" \"jest --runInBand --verbose\"",
@@ -43,7 +43,8 @@
     "pg": "8.13.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "swr": "2.3.2"
+    "swr": "2.3.2",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "19.7.1",
