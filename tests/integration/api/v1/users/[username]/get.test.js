@@ -27,14 +27,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(response.status).toBe(200);
       const responseBody = await response.json();
 
-      expect(responseBody).toEqual({
-        id: responseBody.id,
-        username: responseBody.username,
-        email: responseBody.email,
-        created_at: responseBody.created_at,
-        updated_at: responseBody.updated_at,
-      });
-
+      expect(responseBody).not.toHaveProperty("password");
       expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
@@ -45,14 +38,7 @@ describe("GET /api/v1/users/[username]", () => {
       expect(response2.status).toBe(200);
       const response2Body = await response2.json();
 
-      expect(response2Body).toEqual({
-        id: response2Body.id,
-        username: response2Body.username,
-        email: response2Body.email,
-        password: response2Body.password,
-        created_at: response2Body.created_at,
-        updated_at: response2Body.updated_at,
-      });
+      expect(response2Body).not.toHaveProperty("password");
     });
 
     test("With a mismatch", async () => {
