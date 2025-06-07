@@ -3,8 +3,8 @@ import { ValidationError, NotFoundError } from "infra/errors.js";
 import password from "./password.js";
 
 async function create(userInputValues) {
-  await validateUniqueEmail(userInputValues.email);
   await validateUniqueUsername(userInputValues.username);
+  await validateUniqueEmail(userInputValues.email);
   await hashPassword(userInputValues);
 
   async function runInsertQuery(userInputValues) {
@@ -22,6 +22,7 @@ async function create(userInputValues) {
 
     return result.rows[0];
   }
+
   const newUser = await runInsertQuery(userInputValues);
   return newUser;
 }
@@ -84,9 +85,53 @@ async function findOneByUsername(username) {
   return result.rows[0];
 }
 
+async function update(username, userInputValues) {
+  const currentUser = await findOneByUsername(username);
+
+  if ("username" in userInputValues) {
+    await validateUniqueUsername(userInputValues.username);
+  }
+
+  if ("email" in userInputValues) {
+    await validateUniqueEmail(userInputValues.email);
+  }
+
+  const userWithNewValues = { ...currentUser, ...userInputValues };
+  console.log(userWithNewValues);
+
+  const updatedUser = await runUpdateQuery(userWithNewValues);
+  return updatedUser;
+
+  async function runUpdateQuery(userWithNewValues) {
+    const results = await database.query({
+      text: `
+      UPDATE
+        users
+      SET
+        username = $2,
+        email = $3,
+        password = $4,
+        updated_at = timezone('utc', now())
+      WHERE
+        id = $1
+      RETURNING
+       *;
+      `,
+      values: [
+        userWithNewValues.id,
+        userWithNewValues.username,
+        userWithNewValues.email,
+        userWithNewValues.password,
+      ],
+    });
+    return results.rows[0];
+  }
+}
+
 const user = {
   create,
   findOneByUsername,
+  update,
 };
 
 export default user;
