@@ -96,8 +96,11 @@ async function update(username, userInputValues) {
     await validateUniqueEmail(userInputValues.email);
   }
 
+  if ("password" in userInputValues) {
+    await hashPassword(userInputValues);
+  }
+
   const userWithNewValues = { ...currentUser, ...userInputValues };
-  console.log(userWithNewValues);
 
   const updatedUser = await runUpdateQuery(userWithNewValues);
   return updatedUser;
