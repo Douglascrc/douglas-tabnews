@@ -1,6 +1,6 @@
 # douglas-tabnews
 
-Implementação do projeto tabnews para o curso.dev
+Implementação do projeto tabnews para o tabdouglas.com.br
 
 ## Índice
 
