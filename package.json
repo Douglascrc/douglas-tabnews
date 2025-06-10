@@ -50,6 +50,7 @@
   "devDependencies": {
     "@commitlint/cli": "19.7.1",
     "@commitlint/config-conventional": "19.7.1",
+    "@faker-js/faker": "^9.8.0",
     "concurrently": "9.1.2",
     "cz-conventional-changelog": "3.3.0",
     "eslint": "9.20.1",
