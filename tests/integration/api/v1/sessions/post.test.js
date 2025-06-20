@@ -1,5 +1,7 @@
 import orchestrator from "tests/orchestrator.js";
 import { faker } from "@faker-js/faker";
+import { version as uuidVersion } from "uuid";
+import password from "models/password";
 
 beforeAll(async () => {
   await orchestrator.waitAllServices();
@@ -31,8 +33,8 @@ describe("POST /api/v1/sessions", () => {
 
     expect(responseBody).toEqual({
       name: "UnauthorizedError",
-      message: "Dados de autenticação não conferem",
-      action: "Verifique os dados enviados",
+      message: "Dados de autenticação não conferem.",
+      action: "Verifique os dados enviados.",
       status_code: 401,
     });
   });
@@ -56,8 +58,8 @@ describe("POST /api/v1/sessions", () => {
 
     expect(responseBody).toEqual({
       name: "UnauthorizedError",
-      message: "Dados de autenticação não conferem",
-      action: "Verifique os dados enviados",
+      message: "Dados de autenticação não conferem.",
+      action: "Verifique os dados enviados.",
       status_code: 401,
     });
   });
@@ -83,8 +85,8 @@ describe("POST /api/v1/sessions", () => {
 
     expect(responseBody).toEqual({
       name: "UnauthorizedError",
-      message: "Dados de autenticação não conferem",
-      action: "Verifique os dados enviados",
+      message: "Dados de autenticação não conferem.",
+      action: "Verifique os dados enviados.",
       status_code: 401,
     });
   });
@@ -109,5 +111,20 @@ describe("POST /api/v1/sessions", () => {
     });
 
     expect(response.status).toBe(201);
+
+    const responseBody = await response.json();
+
+    expect(uuidVersion(responseBody.id)).toBe(4);
+    expect(Date.parse(responseBody.created_at)).not.toBeNaN();
+    expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+
+    expect(responseBody).toEqual({
+      id: responseBody.id,
+      username: createdUser.username,
+      email: createdUser.email,
+      password: createdUser.password,
+      created_at: responseBody.created_at,
+      updated_at: responseBody.updated_at,
+    });
   });
 });
