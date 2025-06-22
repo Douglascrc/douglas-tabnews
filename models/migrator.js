@@ -24,6 +24,12 @@ async function runPendingMigrations() {
     });
 
     return migratedMigrations;
+  } catch (error) {
+    const publicErrorObject = new ServiceError({
+      cause: error,
+      message: "Error ao executar as migrations",
+    });
+    throw publicErrorObject;
   } finally {
     await dbClient?.end();
   }
