@@ -1,7 +1,8 @@
 import orchestrator from "tests/orchestrator.js";
 import { faker } from "@faker-js/faker";
 import { version as uuidVersion } from "uuid";
-import password from "models/password";
+import session from "models/session.js";
+import setCookieParser from "set-cookie-parser";
 
 beforeAll(async () => {
   await orchestrator.waitAllServices();
@@ -13,7 +14,7 @@ describe("POST /api/v1/sessions", () => {
   test("No match password, but correct email", async () => {
     const testPassword = faker.internet.password();
 
-    const createdUser = await orchestrator.createUser({
+    await orchestrator.createUser({
       email: "email.correto@mail.com",
     });
 
@@ -115,16 +116,37 @@ describe("POST /api/v1/sessions", () => {
     const responseBody = await response.json();
 
     expect(uuidVersion(responseBody.id)).toBe(4);
+    expect(Date.parse(responseBody.expires_at)).not.toBeNaN();
     expect(Date.parse(responseBody.created_at)).not.toBeNaN();
     expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
     expect(responseBody).toEqual({
       id: responseBody.id,
-      username: createdUser.username,
-      email: createdUser.email,
-      password: createdUser.password,
+      token: responseBody.token,
+      user_id: createdUser.id,
+      expires_at: responseBody.expires_at,
       created_at: responseBody.created_at,
       updated_at: responseBody.updated_at,
+    });
+
+    const expiresAt = new Date(responseBody.expires_at);
+    const createAt = new Date(responseBody.created_at);
+
+    expiresAt.setMilliseconds(0);
+    createAt.setMilliseconds(0);
+
+    expect(expiresAt - createAt).toBe(session.EXPIRATION_IN_MILISECONDS);
+
+    const parsedSetCookie = setCookieParser(response, {
+      map: true,
+    });
+
+    expect(parsedSetCookie.session_id).toEqual({
+      name: "session_id",
+      value: responseBody.token,
+      maxAge: session.EXPIRATION_IN_MILISECONDS / 1000,
+      path: "/",
+      httpOnly: true,
     });
   });
 });
