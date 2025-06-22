@@ -1,6 +1,6 @@
 export class InternalServerError extends Error {
-  constructor({ cause }) {
-    super("Um erro interno inesperado aconteceu", {
+  constructor({ cause, message }) {
+    super(message || "Um erro interno inesperado aconteceu", {
       cause: cause,
     });
     this.name = "Internal Server Error";
