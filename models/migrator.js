@@ -7,7 +7,6 @@ import { ServiceError } from "infra/errors.js";
 const defaultMigrationsRunner = {
   dir: join(process.cwd(), "infra", "migrations"),
   direction: "up",
-  log: () => {},
   migrationsTable: "pgmigrations",
 };
 
@@ -29,6 +28,7 @@ async function runPendingMigrations() {
       cause: error,
       message: "Error ao executar as migrations",
     });
+
     throw publicErrorObject;
   } finally {
     await dbClient?.end();
