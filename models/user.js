@@ -66,6 +66,27 @@ async function validateUniqueUsername(username) {
   }
 }
 
+async function findOneById(userId) {
+  const result = await database.query({
+    text: `
+    SELECT
+      *
+    FROM
+      users
+    WHERE id = $1
+      LIMIT 1;`,
+    values: [userId],
+  });
+  if (result.rowCount === 0) {
+    throw new NotFoundError({
+      message: "O id informado não foi encontrado no sistema.",
+      action: "Verifique se o id está digitado corretamente.",
+    });
+  }
+
+  return result.rows[0];
+}
+
 async function findOneByUsername(username) {
   const result = await database.query({
     text: `
@@ -152,6 +173,7 @@ async function update(username, userInputValues) {
 
 const user = {
   create,
+  findOneById,
   findOneByUsername,
   findOneByEmail,
   update,
