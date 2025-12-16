@@ -57,9 +57,35 @@ async function create(userId) {
   }
 }
 
+async function renew(sessionId) {
+  const expires_at = new Date(Date.now() + EXPIRATION_IN_MILISECONDS);
+  const newSession = await runUpdatedQuery(sessionId, expires_at);
+  return newSession;
+
+  async function runUpdatedQuery(sessionId, expires_at) {
+    const result = await database.query({
+      text: `
+        UPDATE
+          sessions
+        SET
+          expires_at = $2,
+          updated_at = NOW()
+        WHERE
+          id = $1
+        RETURNING
+        *
+        ;`,
+      values: [sessionId, expires_at],
+    });
+
+    return result.rows[0];
+  }
+}
+
 const session = {
   create,
   findOneValidByToken,
+  renew,
   EXPIRATION_IN_MILISECONDS,
 };
 
