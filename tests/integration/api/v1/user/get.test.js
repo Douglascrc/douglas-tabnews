@@ -2,6 +2,7 @@ import session from "models/session.js";
 import orchestrator from "tests/orchestrator.js";
 import { version as uuidVersion } from "uuid";
 import setCookieParser from "set-cookie-parser";
+import crypto from "node:crypto";
 
 beforeAll(async () => {
   await orchestrator.clearDatabase();
@@ -105,8 +106,7 @@ describe("GET /api/v1/user", () => {
 
       let sessionObject = await orchestrator.createSession(createdUser.id);
 
-      sessionObject.token =
-        "a0345416395633f80483f967bdbe580ea440b925c2f46f29c14a704376f7c871a38447c14a80fb618b3896eda753cc6f";
+      sessionObject.token = crypto.randomBytes(48).toString("hex");
 
       const response = await fetch(`${process.env.WEB_SERVER}/api/v1/user`, {
         headers: {
