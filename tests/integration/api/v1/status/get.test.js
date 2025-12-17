@@ -31,7 +31,7 @@ describe("GET /api/v1/status", () => {
 
     expect(responseBody.dependencies.database_info.version).toBeDefined();
     expect(typeof responseBody.dependencies.database_info.version).toBe(
-      "number",
+      "string",
     );
   });
 });
