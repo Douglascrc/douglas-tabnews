@@ -11,7 +11,9 @@ export default router.handler(controller.errorHandlers);
 async function getHandler(request, response) {
   const updatedAt = new Date().toISOString();
   let databaseSettings = {};
-  const databaseName = process.env.POSTGRES_DB;
+  const databaseName =
+    process.env.POSTGRES_DB ||
+    process.env.DATABASE_URL.split("/").slice(-1)[0].split("?")[0];
 
   let databaseResult = await database.query({
     text: `SELECT current_setting('server_version')::FLOAT AS version, 
