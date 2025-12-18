@@ -62,6 +62,18 @@ Veja o [package.json](package.json) para mais detalhes.
   - **Status 201:** Caso migrações tenham sido aplicadas.
   - **Status 200:** Caso não haja migrações pendentes.
 
+### Autenticação 
+ - **POST /api/v1/users**
+   Cria um usuário no banco.
+ - **GET /api/v1/users/[username]**
+   Recupera informações do usuário.
+ - **POST /api/v1/sessions**
+   Permite que o usuario seja autenticado com       um `session_id`.
+ - **GET /api/v1/user**
+   Recupera os dados do usuario logado e
+   renova o tempo de expiração da sessão.
+
+
 ## Infraestrutura
 
 - **Banco de Dados:** PostgreSQL (configurado via [docker compose](infra/compose.yaml)).
