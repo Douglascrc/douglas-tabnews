@@ -123,6 +123,8 @@ describe("PATCH /api/v1/users/[username]", () => {
         id: responseBody.id,
         username: "debug",
         email: responseBody.email,
+        features: ["read:activation_token"],
+
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -135,12 +137,12 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With a unique 'email'", async () => {
-      const user = await orchestrator.createUser({
+      const createdUser = await orchestrator.createUser({
         email: "douglascam@mail.com",
       });
 
       const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/users/${user.username}`,
+        `${process.env.WEB_SERVER}/api/v1/users/${createdUser.username}`,
         {
           method: "PATCH",
           headers: {
@@ -157,8 +159,10 @@ describe("PATCH /api/v1/users/[username]", () => {
 
       expect(responseBody).toEqual({
         id: responseBody.id,
-        username: user.username,
+        username: createdUser.username,
         email: "douglasCampos@mail.com",
+        features: ["read:activation_token"],
+
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -195,6 +199,8 @@ describe("PATCH /api/v1/users/[username]", () => {
         id: responseBody.id,
         username: createdUser.username,
         email: createdUser.email,
+        features: ["read:activation_token"],
+
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
