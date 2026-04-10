@@ -2,7 +2,7 @@ import email from "infra/email.js";
 import orchestrator from "tests/orchestrator.js";
 
 beforeAll(async () => {
-  orchestrator.waitAllServices();
+  await orchestrator.waitAllServices();
 });
 
 describe("infra/email.js", () => {

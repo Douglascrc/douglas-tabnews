@@ -1,4 +1,3 @@
-import { password } from "pg/lib/defaults";
 import orchestrator from "tests/orchestrator";
 
 beforeAll(async () => {
@@ -38,8 +37,16 @@ describe("Use case Registration Flow (all successful)", () => {
       created_at: createUserResponseBody.created_at,
       updated_at: createUserResponseBody.updated_at,
     });
-});
-  test("Receive a activation email", async () => {});
+  });
+
+  test("Receive a activation email", async () => {
+    const lastEmail = await orchestrator.getLastEmail();
+
+    expect(lastEmail.sender).toBe("<douglascamdev@hotmail.com>");
+    expect(lastEmail.recipients[0]).toBe("<registration.flow@curso.dev>");
+    expect(lastEmail.subject).toBe("Ative o seu cadastro!");
+    expect(lastEmail.text).toContain("RegistrationFlow");
+  });
 
   test("Activate account", async () => {});
 
