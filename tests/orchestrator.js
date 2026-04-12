@@ -4,6 +4,7 @@ import migrator from "models/migrator.js";
 import user from "models/user.js";
 import { faker } from "@faker-js/faker";
 import session from "models/session.js";
+import activation from "models/activation.js";
 
 const emailHttpUrl = `http://${process.env.EMAIL_HTTP_HOST}:${process.env.EMAIL_HTTP_PORT}`;
 
@@ -86,7 +87,7 @@ async function getLastEmail() {
   const emailListResponseBody = await emailListResponse.json();
   const lastEmailItem = emailListResponseBody.pop();
 
-  if (!lastEmailItem.id) {
+  if (!lastEmailItem?.id) {
     return null;
   }
 
@@ -99,6 +100,24 @@ async function getLastEmail() {
   return lastEmailItem;
 }
 
+async function extractUUID() {
+  const lastEmail = await getLastEmail();
+
+  const match = lastEmail?.text?.match(
+    /[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/i,
+  );
+
+  if (!match) {
+    return null;
+  }
+
+  const activationToken = await activation.findOneValidById(match[0]);
+
+  return {
+    ...activationToken,
+  };
+}
+
 const orchestrator = {
   waitAllServices,
   clearDatabase,
@@ -107,6 +126,7 @@ const orchestrator = {
   createSession,
   deleteAllEmails,
   getLastEmail,
+  extractUUID,
 };
 
 export default orchestrator;
