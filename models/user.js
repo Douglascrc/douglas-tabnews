@@ -10,7 +10,7 @@ async function create(userInputValues) {
 
   const newUser = await runInsertQuery(userInputValues);
   return newUser;
- 
+
   async function runInsertQuery(userInputValues) {
     const result = await database.query({
       text: `
@@ -131,6 +131,29 @@ async function findOneByEmail(email) {
   return result.rows[0];
 }
 
+async function setFeatures(userId, features) {
+  const updatedUser = await runUpdateQuery(userId, features);
+  return updatedUser;
+
+  async function runUpdateQuery(userId, features) {
+    const results = await database.query({
+      text: `
+      UPDATE
+        users
+      SET
+        features = $2,
+        updated_at = timezone('utc', now())
+      WHERE
+        id = $1
+      RETURNING
+       *;
+      `,
+      values: [userId, features],
+    });
+    return results.rows[0];
+  }
+}
+
 async function update(username, userInputValues) {
   const currentUser = await findOneByUsername(username);
 
@@ -161,6 +184,7 @@ async function update(username, userInputValues) {
         email = $3,
         password = $4,
         updated_at = timezone('utc', now())
+        feature = $5
       WHERE
         id = $1
       RETURNING
@@ -183,6 +207,7 @@ const user = {
   findOneByUsername,
   findOneByEmail,
   update,
+  setFeatures,
 };
 
 export default user;

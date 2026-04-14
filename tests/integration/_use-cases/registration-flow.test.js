@@ -1,3 +1,5 @@
+import webserver from "infra/webserver";
+import user from "models/user";
 import orchestrator from "tests/orchestrator";
 
 beforeAll(async () => {
@@ -8,6 +10,9 @@ beforeAll(async () => {
 });
 
 describe("Use case Registration Flow (all successful)", () => {
+  let createUserResponseBody;
+  let activationTokenObject;
+
   test("Create user account", async () => {
     const createUserResponse = await fetch(
       `${process.env.WEB_SERVER}/api/v1/users`,
@@ -26,7 +31,7 @@ describe("Use case Registration Flow (all successful)", () => {
 
     expect(createUserResponse.status).toBe(201);
 
-    const createUserResponseBody = await createUserResponse.json();
+    createUserResponseBody = await createUserResponse.json();
 
     expect(createUserResponseBody).toEqual({
       id: createUserResponseBody.id,
@@ -42,13 +47,33 @@ describe("Use case Registration Flow (all successful)", () => {
   test("Receive a activation email", async () => {
     const lastEmail = await orchestrator.getLastEmail();
 
+    activationTokenObject = await orchestrator.extractUUID();
+
     expect(lastEmail.sender).toBe("<douglascamdev@hotmail.com>");
     expect(lastEmail.recipients[0]).toBe("<registration.flow@curso.dev>");
     expect(lastEmail.subject).toBe("Ative o seu cadastro!");
     expect(lastEmail.text).toContain("RegistrationFlow");
+    console.log(activationTokenObject);
+    expect(activationTokenObject.user_id).toEqual(createUserResponseBody.id);
+    expect(activationTokenObject.used_at).toBe(null);
   });
 
-  test("Activate account", async () => {});
+  test("Activate account", async () => {
+    const activationResponse = await fetch(
+      `${webserver.origin}/api/v1/activations/${activationTokenObject.id}`,
+      {
+        method: "PATCH",
+      },
+    );
+
+    expect(activationResponse.status).toBe(200);
+
+    const activationResponseBody = await activationResponse.json();
+    expect(Date.parse(activationResponseBody.used_at)).not.toBeNaN();
+
+    const activatedUser = await user.findOneByUsername("RegistrationFlow");
+    expect(activatedUser.features).toEqual(["create:session"]);
+  });
 
   test("Login", async () => {});
 
