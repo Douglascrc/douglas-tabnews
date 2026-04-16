@@ -1,4 +1,4 @@
-import webserver from "infra/webserver";
+import webserver from "infra/webserver.js";
 import user from "models/user";
 import orchestrator from "tests/orchestrator";
 
@@ -53,7 +53,6 @@ describe("Use case Registration Flow (all successful)", () => {
     expect(lastEmail.recipients[0]).toBe("<registration.flow@curso.dev>");
     expect(lastEmail.subject).toBe("Ative o seu cadastro!");
     expect(lastEmail.text).toContain("RegistrationFlow");
-    console.log(activationTokenObject);
     expect(activationTokenObject.user_id).toEqual(createUserResponseBody.id);
     expect(activationTokenObject.used_at).toBe(null);
   });
@@ -75,7 +74,26 @@ describe("Use case Registration Flow (all successful)", () => {
     expect(activatedUser.features).toEqual(["create:session"]);
   });
 
-  test("Login", async () => {});
+  test("Login", async () => {
+    const createSessionResponse = await fetch(
+      `${webserver.origin}/api/v1/sessions`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: "registration.flow@curso.dev",
+          password: "RegistrationFlowPassword",
+        }),
+      },
+    );
+
+    expect(createSessionResponse.status).toBe(201);
+    const createSessionResponseBody = await createSessionResponse.json();
+
+    expect(createSessionResponseBody.user_id).toBe(createUserResponseBody.id);
+  });
 
   test("Get user information", async () => {});
 });
