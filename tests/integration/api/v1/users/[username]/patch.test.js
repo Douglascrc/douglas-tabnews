@@ -2,6 +2,7 @@ import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
 import password from "models/password";
 import user from "models/user";
+import webserver from "infra/webserver";
 
 beforeAll(async () => {
   await orchestrator.waitAllServices();
@@ -13,7 +14,7 @@ describe("PATCH /api/v1/users/[username]", () => {
   describe("Anonymous user", () => {
     test("With nonexistent 'username'", async () => {
       const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/users/usuarioInexistente`,
+        `${webserver.origin}/api/v1/users/usuarioInexistente`,
         {
           method: "PATCH",
           headers: {
@@ -42,7 +43,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
 
       const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/users/${createdUser.username}`,
+        `${webserver.origin}/api/v1/users/${createdUser.username}`,
         {
           method: "PATCH",
           headers: {
@@ -75,7 +76,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
 
       const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/users/${createdUser2.username}`,
+        `${webserver.origin}/api/v1/users/${createdUser2.username}`,
         {
           method: "PATCH",
           headers: {
@@ -104,7 +105,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
 
       const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/users/douglasCampos`,
+        `${webserver.origin}/api/v1/users/douglasCampos`,
         {
           method: "PATCH",
           headers: {
@@ -124,7 +125,6 @@ describe("PATCH /api/v1/users/[username]", () => {
         username: "debug",
         email: responseBody.email,
         features: ["read:activation_token"],
-
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -142,7 +142,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
 
       const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/users/${createdUser.username}`,
+        `${webserver.origin}/api/v1/users/${createdUser.username}`,
         {
           method: "PATCH",
           headers: {
@@ -180,7 +180,7 @@ describe("PATCH /api/v1/users/[username]", () => {
       });
 
       const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/users/${createdUser.username}`,
+        `${webserver.origin}/api/v1/users/${createdUser.username}`,
         {
           method: "PATCH",
           headers: {

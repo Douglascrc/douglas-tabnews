@@ -5,15 +5,9 @@ beforeAll(async () => {
   await orchestrator.waitAllServices();
   await orchestrator.clearDatabase();
   await orchestrator.runPendingMigrations();
-
-  await fetch(`${process.env.WEB_SERVER}/api/v1/users`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username: "douglasCampos",
-      email: "douglas@mail.com",
-      password: "1234",
-    }),
+  await orchestrator.createUser({
+    username: "douglasCampos",
+    email: "douglas@mail.com",
   });
 });
 

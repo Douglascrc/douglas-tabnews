@@ -184,7 +184,6 @@ async function update(username, userInputValues) {
         email = $3,
         password = $4,
         updated_at = timezone('utc', now())
-        feature = $5
       WHERE
         id = $1
       RETURNING
