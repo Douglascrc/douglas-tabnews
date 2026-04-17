@@ -3,6 +3,7 @@ import { version as uuidVersion } from "uuid";
 import session from "models/session.js";
 import setCookieParser from "set-cookie-parser";
 import crypto from "node:crypto";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitAllServices();
@@ -17,15 +18,14 @@ describe("DELETE /api/v1/sessions", () => {
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
-      const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/sessions`,
-        {
-          headers: {
-            Cookie: `session_id=${sessionObject.token}`,
-          },
-          method: "DELETE",
+      await orchestrator.activationUser(createdUser);
+
+      const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
+        headers: {
+          Cookie: `session_id=${sessionObject.token}`,
         },
-      );
+        method: "DELETE",
+      });
 
       expect(response.status).toBe(200);
 
@@ -65,7 +65,7 @@ describe("DELETE /api/v1/sessions", () => {
       });
 
       const doubleCheckResponse = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/user`,
+        `${webserver.origin}/api/v1/user`,
         {
           headers: {
             Cookie: `session_id=${sessionObject.token}`,
@@ -95,15 +95,12 @@ describe("DELETE /api/v1/sessions", () => {
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
-      const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/sessions`,
-        {
-          headers: {
-            Cookie: `session_id=${sessionObject.token}`,
-          },
-          method: "DELETE",
+      const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
+        headers: {
+          Cookie: `session_id=${sessionObject.token}`,
         },
-      );
+        method: "DELETE",
+      });
 
       jest.useRealTimers();
 
@@ -127,15 +124,12 @@ describe("DELETE /api/v1/sessions", () => {
 
       sessionObject.token = crypto.randomBytes(48).toString("hex");
 
-      const response = await fetch(
-        `${process.env.WEB_SERVER}/api/v1/sessions`,
-        {
-          headers: {
-            Cookie: `session_id=${sessionObject.token}`,
-          },
-          method: "DELETE",
+      const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
+        headers: {
+          Cookie: `session_id=${sessionObject.token}`,
         },
-      );
+        method: "DELETE",
+      });
 
       expect(response.status).toBe(401);
       const responseBody = await response.json();

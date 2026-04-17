@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import { version as uuidVersion } from "uuid";
 import session from "models/session.js";
 import setCookieParser from "set-cookie-parser";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitAllServices();
@@ -18,7 +19,7 @@ describe("POST /api/v1/sessions", () => {
       email: "email.correto@mail.com",
     });
 
-    const response = await fetch(`${process.env.WEB_SERVER}/api/v1/sessions`, {
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +44,7 @@ describe("POST /api/v1/sessions", () => {
   test("Incorrect email, but correct password", async () => {
     const createdUser = await orchestrator.createUser();
 
-    const response = await fetch(`${process.env.WEB_SERVER}/api/v1/sessions`, {
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +71,7 @@ describe("POST /api/v1/sessions", () => {
 
     await orchestrator.createUser();
 
-    const response = await fetch(`${process.env.WEB_SERVER}/api/v1/sessions`, {
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +101,8 @@ describe("POST /api/v1/sessions", () => {
       password: testPassword,
     });
 
-    const response = await fetch(`${process.env.WEB_SERVER}/api/v1/sessions`, {
+    await orchestrator.activationUser(createdUser);
+    const response = await fetch(`${webserver.origin}/api/v1/sessions`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

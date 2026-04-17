@@ -118,6 +118,10 @@ async function extractUUID() {
   };
 }
 
+async function activationUser(inactivateUser) {
+  return await activation.activateUserById(inactivateUser.id);
+}
+
 const orchestrator = {
   waitAllServices,
   clearDatabase,
@@ -127,6 +131,7 @@ const orchestrator = {
   deleteAllEmails,
   getLastEmail,
   extractUUID,
+  activationUser,
 };
 
 export default orchestrator;
