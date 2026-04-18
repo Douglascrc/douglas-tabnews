@@ -3,6 +3,7 @@ import orchestrator from "tests/orchestrator.js";
 import { version as uuidVersion } from "uuid";
 import setCookieParser from "set-cookie-parser";
 import crypto from "node:crypto";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.clearDatabase();
@@ -10,6 +11,23 @@ beforeAll(async () => {
 });
 
 describe("GET /api/v1/user", () => {
+  describe("Anonymous user", () => {
+    test("Retrieving the endpoint", async () => {
+      const response = await fetch(`${webserver.origin}/api/v1/user`);
+
+      expect(response.status).toBe(403);
+
+      const responseBody = await response.json();
+
+      expect(responseBody).toEqual({
+        name: "ForbiddenError",
+        message: "Você não possui permissão para executar essa ação.",
+        action: `Verifique se seu usuário possui a feature read:session.`,
+        status_code: 403,
+      });
+    });
+  });
+
   describe("Default user", () => {
     test("With valid session", async () => {
       const createdUser = await orchestrator.createUser({
@@ -18,7 +36,9 @@ describe("GET /api/v1/user", () => {
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
-      const response = await fetch(`${process.env.WEB_SERVER}/api/v1/user`, {
+      const authenticatedUser = await orchestrator.activationUser(createdUser);
+
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -37,10 +57,9 @@ describe("GET /api/v1/user", () => {
         username: "UserWithValidSession",
         email: createdUser.email,
         password: createdUser.password,
-        features: ["read:activation_token"],
-
+        features: ["create:session", "read:session", "read:activation_token"],
         created_at: createdUser.created_at.toISOString(),
-        updated_at: createdUser.updated_at.toISOString(),
+        updated_at: authenticatedUser.updated_at.toISOString(),
       });
 
       expect(uuidVersion(responseBody.id)).toBe(4);
@@ -82,7 +101,7 @@ describe("GET /api/v1/user", () => {
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
-      const response = await fetch(`${process.env.WEB_SERVER}/api/v1/user`, {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -110,7 +129,7 @@ describe("GET /api/v1/user", () => {
 
       sessionObject.token = crypto.randomBytes(48).toString("hex");
 
-      const response = await fetch(`${process.env.WEB_SERVER}/api/v1/user`, {
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -140,7 +159,9 @@ describe("GET /api/v1/user", () => {
 
       const sessionObject = await orchestrator.createSession(createdUser.id);
 
-      const response = await fetch(`${process.env.WEB_SERVER}/api/v1/user`, {
+      const authenticatedUser = await orchestrator.activationUser(createdUser);
+
+      const response = await fetch(`${webserver.origin}/api/v1/user`, {
         headers: {
           Cookie: `session_id=${sessionObject.token}`,
         },
@@ -156,10 +177,9 @@ describe("GET /api/v1/user", () => {
         username: "UserWithHalfExpiredSession",
         email: createdUser.email,
         password: createdUser.password,
-        features: ["read:activation_token"],
-
+        features: ["create:session", "read:session", "read:activation_token"],
         created_at: createdUser.created_at.toISOString(),
-        updated_at: createdUser.updated_at.toISOString(),
+        updated_at: authenticatedUser.updated_at.toISOString(),
       });
     });
   });

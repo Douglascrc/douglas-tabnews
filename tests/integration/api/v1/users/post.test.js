@@ -2,6 +2,7 @@ import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
 import user from "models/user.js";
 import password from "models/password.js";
+import webserver from "infra/webserver.js";
 
 beforeAll(async () => {
   await orchestrator.waitAllServices();
@@ -12,7 +13,7 @@ beforeAll(async () => {
 describe("POST /api/v1/users", () => {
   describe("Anonymous user", () => {
     test("With unique and valid data", async () => {
-      const response = await fetch(`${process.env.WEB_SERVER}/api/v1/users`, {
+      const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +34,6 @@ describe("POST /api/v1/users", () => {
         email: responseBody.email,
         password: responseBody.password,
         features: ["read:activation_token"],
-
         created_at: responseBody.created_at,
         updated_at: responseBody.updated_at,
       });
@@ -61,7 +61,7 @@ describe("POST /api/v1/users", () => {
     });
 
     test("With a duplicated email", async () => {
-      const response = await fetch(`${process.env.WEB_SERVER}/api/v1/users`, {
+      const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ describe("POST /api/v1/users", () => {
     });
 
     test("With a duplicated username", async () => {
-      const response = await fetch(`${process.env.WEB_SERVER}/api/v1/users`, {
+      const response = await fetch(`${webserver.origin}/api/v1/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
