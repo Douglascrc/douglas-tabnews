@@ -72,7 +72,7 @@ async function createUser(userObject) {
 }
 
 async function createSession(userId) {
-  const newSession = session.create(userId);
+  const newSession = await session.create(userId);
   return newSession;
 }
 
